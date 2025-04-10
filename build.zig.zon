@@ -1,14 +1,24 @@
 .{
-    .name = "freetype",
-    .version = "0.0.0",
+    .name = .freetype,
+    .version = "1.0.0",
+    .minimum_zig_version = "0.14.0",
+    .fingerprint = 0xac2059b63676ed70,
     .dependencies = .{
         .libpng = .{
-            .url = "https://github.com/mitchellh/zig-build-libpng/archive/6cb6e26da19c0bdb06aeb89aa46a2e14091b854c.tar.gz",
-            .hash = "1220d0134e1e0887e4697322ea31bbf84fc4583917ac048b49c6ebf8505e2c916a91",
+            .url = "https://github.com/defaultgnome/zig-build-libpng/archive/e4579ddcd9006e488b41654c9ba2d108957a33f2.tar.gz",
+            .hash = "1220cec25a630efac6f17ea24befbc8e39639c08d57499065ecbcb8d47375202efc5",
         },
         .zlib = .{
-            .url = "https://github.com/mitchellh/zig-build-zlib/archive/830761587bf91616d45e6a2669359e7eb5d27ae7.tar.gz",
-            .hash = "12201c84e11aae4391e032f2ed86862d7ee2259a0b4892ee76b2e361d06e8da37338",
+            .url = "https://github.com/defaultgnome/zig-build-zlib/archive/d0e1e4f9566e3bcb0fed11ea4841bf5eee8303d3.tar.gz",
+            .hash = "1220ee7c44bd3ee0e28027962fb0195be16e8cc8d245732e909456fcbc26f4ddd4fd",
         },
+    },
+    .paths = .{
+        "include",
+        "upstream",
+        "upstream.txt",
+        "README.md",
+        "build.zig",
+        "build.zig.zon",
     },
 }
