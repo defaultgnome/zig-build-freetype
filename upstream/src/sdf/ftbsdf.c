@@ -4,7 +4,7 @@
  *
  *   Signed Distance Field support for bitmap fonts (body only).
  *
- * Copyright (C) 2020-2023 by
+ * Copyright (C) 2020-2024 by
  * David Turner, Robert Wilhelm, and Werner Lemberg.
  *
  * Written by Anuj Verma.
@@ -373,7 +373,7 @@
    * @Input:
    *   current ::
    *     Array of Euclidean distances.  `current` must point to the position
-   *     for which the distance is to be caculated.  We treat this array as
+   *     for which the distance is to be calculated.  We treat this array as
    *     a two-dimensional array mapped to a one-dimensional array.
    *
    *   x ::
@@ -550,7 +550,7 @@
    *
    * @Description:
    *   Loops over all the pixels and call `compute_edge_distance` only for
-   *   edge pixels.  This maked the process a lot faster since
+   *   edge pixels.  This makes the process a lot faster since
    *   `compute_edge_distance` uses functions such as `FT_Vector_NormLen',
    *   which are quite slow.
    *
@@ -1173,9 +1173,12 @@
 
   /* called when adding a new module through @FT_Add_Module */
   static FT_Error
-  bsdf_raster_new( FT_Memory      memory,
-                   BSDF_PRaster*  araster )
+  bsdf_raster_new( void*       memory_,    /* FT_Memory     */
+                   FT_Raster*  araster_ )  /* BSDF_PRaster* */
   {
+    FT_Memory      memory  = (FT_Memory)memory_;
+    BSDF_PRaster*  araster = (BSDF_PRaster*)araster_;
+
     FT_Error      error;
     BSDF_PRaster  raster = NULL;
 

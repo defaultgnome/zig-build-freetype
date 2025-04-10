@@ -4,7 +4,7 @@
  *
  *   PNG Bitmap glyph support.
  *
- * Copyright (C) 2013-2023 by
+ * Copyright (C) 2013-2024 by
  * Google, Inc.
  * Written by Stuart Gill and Behdad Esfahbod.
  *
@@ -406,10 +406,7 @@
 
     switch ( color_type )
     {
-    default:
-      /* Shouldn't happen, but ... */
-      FALL_THROUGH;
-
+    default:  /* Shouldn't happen, but ... */
     case PNG_COLOR_TYPE_RGB_ALPHA:
       png_set_read_user_transform_fn( png, premultiply_data );
       break;

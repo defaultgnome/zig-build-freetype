@@ -4,7 +4,7 @@
  *
  *   AFM support for Type 1 fonts (body).
  *
- * Copyright (C) 1996-2023 by
+ * Copyright (C) 1996-2024 by
  * David Turner, Robert Wilhelm, and Werner Lemberg.
  *
  * This file is part of the FreeType project, and may only be used,
@@ -299,7 +299,7 @@
       /* ascender and descender are optional and could both be zero */
       /* check if values are meaningful before overriding defaults  */
       if ( fi->Ascender > fi->Descender )
-      {  
+      {
         /* no `U' suffix here to 0x8000! */
         t1_face->ascender  = (FT_Short)( ( fi->Ascender  + 0x8000 ) >> 16 );
         t1_face->descender = (FT_Short)( ( fi->Descender + 0x8000 ) >> 16 );

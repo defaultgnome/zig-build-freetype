@@ -4,7 +4,7 @@
  *
  *   FreeType integer types definitions.
  *
- * Copyright (C) 1996-2023 by
+ * Copyright (C) 1996-2024 by
  * David Turner, Robert Wilhelm, and Werner Lemberg.
  *
  * This file is part of the FreeType project, and may only be used,
@@ -16,6 +16,8 @@
  */
 #ifndef FREETYPE_CONFIG_INTEGER_TYPES_H_
 #define FREETYPE_CONFIG_INTEGER_TYPES_H_
+
+FT_BEGIN_HEADER
 
   /* There are systems (like the Texas Instruments 'C54x) where a `char`  */
   /* has 16~bits.  ANSI~C says that `sizeof(char)` is always~1.  Since an */
@@ -246,5 +248,6 @@
   typedef FT_UINT64  FT_UInt64;
 #endif
 
+FT_END_HEADER
 
 #endif  /* FREETYPE_CONFIG_INTEGER_TYPES_H_ */

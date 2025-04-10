@@ -4,7 +4,7 @@
  *
  *   The FreeType private base classes (body).
  *
- * Copyright (C) 1996-2023 by
+ * Copyright (C) 1996-2024 by
  * David Turner, Robert Wilhelm, and Werner Lemberg.
  *
  * This file is part of the FreeType project, and may only be used,
@@ -1019,7 +1019,8 @@
       /*      elegant.                                            */
 
       /* try to load SVG documents if available */
-      if ( FT_HAS_SVG( face ) )
+      if ( ( load_flags & FT_LOAD_NO_SVG ) == 0 &&
+           FT_HAS_SVG( face )                   )
       {
         error = driver->clazz->load_glyph( slot, face->size,
                                            glyph_index,
@@ -1245,16 +1246,20 @@
   /* destructor for sizes list */
   static void
   destroy_size( FT_Memory  memory,
-                FT_Size    size,
-                FT_Driver  driver )
+                void*      size_,
+                void*      driver_ )
   {
-    /* finalize client-specific data */
-    if ( size->generic.finalizer )
-      size->generic.finalizer( size );
+    FT_Size    size   = (FT_Size)size_;
+    FT_Driver  driver = (FT_Driver)driver_;
+
 
     /* finalize format-specific stuff */
     if ( driver->clazz->done_size )
       driver->clazz->done_size( size );
+
+    /* finalize client-specific data */
+    if ( size->generic.finalizer )
+      size->generic.finalizer( size );
 
     FT_FREE( size->internal );
     FT_FREE( size );
@@ -1293,10 +1298,12 @@
   /* destructor for faces list */
   static void
   destroy_face( FT_Memory  memory,
-                FT_Face    face,
-                FT_Driver  driver )
+                void*      face_,
+                void*      driver_ )
   {
-    FT_Driver_Class  clazz = driver->clazz;
+    FT_Face          face   = (FT_Face)face_;
+    FT_Driver        driver = (FT_Driver)driver_;
+    FT_Driver_Class  clazz  = driver->clazz;
 
 
     /* discard auto-hinting data */
@@ -1310,14 +1317,10 @@
 
     /* discard all sizes for this face */
     FT_List_Finalize( &face->sizes_list,
-                      (FT_List_Destructor)destroy_size,
+                      destroy_size,
                       memory,
                       driver );
     face->size = NULL;
-
-    /* now discard client data */
-    if ( face->generic.finalizer )
-      face->generic.finalizer( face );
 
     /* discard charmaps */
     destroy_charmaps( face, memory );
@@ -1333,6 +1336,10 @@
 
     face->stream = NULL;
 
+    /* now discard client data */
+    if ( face->generic.finalizer )
+      face->generic.finalizer( face );
+
     /* get rid of it */
     if ( face->internal )
     {
@@ -1346,7 +1353,7 @@
   Destroy_Driver( FT_Driver  driver )
   {
     FT_List_Finalize( &driver->faces_list,
-                      (FT_List_Destructor)destroy_face,
+                      destroy_face,
                       driver->root.memory,
                       driver );
   }
@@ -1740,7 +1747,8 @@
     FT_Memory     memory = library->memory;
 
 
-    args.flags = 0;
+    args.driver = NULL;
+    args.flags  = 0;
 
     if ( driver_name )
     {
@@ -2294,7 +2302,10 @@
                                       face_index_internal, aface );
       FT_FREE( data_offsets );
       if ( !error )
-        (*aface)->num_faces = count;
+      {
+        (*aface)->num_faces  = count;
+        (*aface)->face_index = face_index_internal;
+      }
     }
 
     return error;
@@ -5783,7 +5794,7 @@
     ttface = (TT_Face)face;
     sfnt   = (SFNT_Service)ttface->sfnt;
 
-    if ( sfnt->get_colr_layer )
+    if ( sfnt->get_colr_glyph_paint )
       return sfnt->get_colr_glyph_paint( ttface,
                                          base_glyph,
                                          root_transform,
